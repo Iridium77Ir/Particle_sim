@@ -17,8 +17,8 @@ var pixelindex;
 var amountx = Math.floor(ww/radius);
 var amounty = Math.floor(wh/radius);
 
-var radius = 6;
-var boostRange = 10;
+var radius = 4;
+var boostRange = 20;
 
 var hue = Math.random()*340;
 document.getElementById('body').style.backgroundColor = `rgb(${125}, ${125}, ${125})`//`hsl(${hue},50%,50%)`
@@ -29,19 +29,19 @@ function Particle(x, y) {
     this.z = 0;
     this.vz = 0;
     this.accZ = 0;
-    this.friction = 0.995;
+    this.friction = 0.99;
     this.color = 1;
 };
 
 Particle.prototype.render = function(clicked) {
-    this.accZ = this.z * 0.01;
+    this.accZ = this.z * 0.001;
     if(clicked) {
-        this.vz = 10;
+        this.vz = 40;
     };
     if(this.x != 0 && this.y != 0 && this.x != amountx-1 && this.y != amounty-1) {
         for(var i = -1; i < 2; i++) {
             for(var j = -1; j < 2; j++) {
-                particles[(this.x)+i][(this.y)+j].vz -= this.accZ * 0.05;
+                particles[(this.x)+i][(this.y)+j].vz -= this.accZ * 0.1;
             };
         };
     };
@@ -110,7 +110,7 @@ window.addEventListener("mousemove", onMouseMove);
 window.addEventListener("mousedown", mouseDown);
 initScene();
 
-var FPS = 240;
+var FPS = 10000;
 var rememberMe = setInterval(loop, 1000 / FPS);
 
 function loop() {
