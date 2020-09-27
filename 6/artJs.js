@@ -93,7 +93,7 @@ function mouseDown() {
             var distance = Math.sqrt( i*i + j*j );
             if(distance<(boostRange/2)) {
                 particles[Math.floor((mouse.x/radius))+i][Math.floor((mouse.y/radius))+j].render(true);
-            } 
+            };
         };
     };
 };
