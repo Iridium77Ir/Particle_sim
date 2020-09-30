@@ -1,179 +1,154 @@
-const body = document.querySelector('body')
-const canvas = document.createElement('canvas')
-canvas.width = window.innerWidth-1
-canvas.height = window.innerHeight-10
-body.appendChild(canvas)
+var canwidth = window.innerWidth;
+var canheight = window.innerHeight;
 
-const palette = ['#384259', '#F73859', '#7AC7C4', '#C4EDDE']
-const getRColour = () => palette[Math.floor(Math.random() * palette.length)]
+var inc = 0.03;
+var cur = 0;
+var step = 0.1;
 
-const radians = degrees => degrees * (Math.PI / 180)
+var radius = 1;
+var objcolor = 'rgba(0,0,0,0.01)';
 
-const drawIsoCube = (ctx, { x, y, size, angle = 30, colour = 'white' }) => {
-  const a = radians(angle)
-  const dX = size * Math.cos(a)
-  const dY = size * Math.sin(a)
+var space = 10;
+var margin = 0;
 
-  const moveTo = (rX, rY) => ctx.moveTo(x + rX, y + rY)
-  const lineTo = (rX, rY) => ctx.lineTo(x + rX, y + rY)
+var row = Math.floor(canwidth/space);
+var col = Math.floor(canheight/space);
 
-  const fillSolid = () => {
-    ctx.globalCompositeOperation = 'source-over'
-    ctx.fillStyle = colour
-    ctx.fill()
-  }
+var vectorlist = [];
 
-  const fillShadow = (x1, y1, x2, y2, a1, a2) => {
-    const gradient = ctx.createLinearGradient(x + x1, y + y1, x + x2, y + y2)
-    gradient.addColorStop(0, `rgba(${a1}, ${a1}, ${a1}, 0.75)`)
-    gradient.addColorStop(1, `rgba(${a2}, ${a2}, ${a2}, 0.75)`)
-    ctx.globalCompositeOperation = 'multiply'
-    ctx.fillStyle = gradient
-    ctx.fill()
-  }
+var particlenum = 100;
+var particlelist = [];
 
-  const stroke = () => {
-    ctx.globalCompositeOperation = 'lighten'
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)'
-    ctx.stroke()
-  }
+var heightvar = space;
 
-  const rFace = () => {
-    ctx.beginPath()
-    moveTo(0, 0)
-    lineTo(0, size)
-    lineTo(dX, dY)
-    lineTo(dX, dY - size)
-    ctx.closePath()
+var friction = 0.6;
+var influence = 15;
+var accoeff = 10;
 
-    fillSolid()
-    fillShadow(0, 0, dX, dY, 255, 196)
-    stroke()
-  }
+function Particle(x, y) {
+    this.origx = x;
+    this.origy = y;
 
-  const lFace = () => {
-    ctx.beginPath()
-    moveTo(0, 0)
-    lineTo(0, size)
-    lineTo(-dX, dY)
-    lineTo(-dX, dY - size)
-    ctx.closePath()
+    this.x = x*space+margin;
+    this.y = y*space+margin;
 
-    fillSolid()
-    fillShadow(0, 0, -dX, dY, 222, 64)
-    stroke()
-  }
+    this.prevx = this.x;
+    this.prevy = this.y;
 
-  const top = () => {
-    ctx.beginPath()
-    moveTo(0, 0)
-    lineTo(dX, -dY)
-    lineTo(0, -size)
-    lineTo(-dX, -dY)
-    ctx.closePath()
+    this.vx = 0;
+    this.vy = 0;
 
-    fillSolid()
-    fillShadow(0, 0, 0, -size, 255, 127)
-    stroke()
-  }
+    this.accx = 0;
+    this.accy = 0;
 
-  lFace()
-  rFace()
-  top()
+    this.friction = friction + Math.random()*0.1;
+    this.influence = influence + Math.random()*0.5;
+    this.accoeff = accoeff + Math.random()*5;
+
+    this.ttl = 4 + Math.random()*3;
 }
 
-const sketch = () => {
-  const { width, height } = canvas
-  const ctx = canvas.getContext('2d')
-  const size = Math.floor(width / 16)
-  const grid = []
-  const depth = 5
-  const curve = 4
+function Vector(x, y) {
+    this.origx = x;
+    this.origy = y;
 
-  const rowHeight = size
-  const columnWidth = Math.sqrt(size ** 2 - (size / 2) ** 2)
-  const curveWidth = columnWidth * 2 * (curve + 1)
-  // const planes = Math.ceil(height / (rowHeight * 2))
+    this.x = x*space+margin;
+    this.y = y*space+margin;
 
-  for (let y = 0; y <= height + rowHeight * 2; y += rowHeight * 2) {
-    const plane = y / (rowHeight * 2)
+    this.angle = 0;
+}
 
-    for (let x = width; x >= -curveWidth; x -= curveWidth) {
-      for (let z = depth; z >= 0; z -= 1) {
-        const yOffset = y - z * rowHeight
-        grid.push({
-          x: x - columnWidth,
-          y: yOffset - rowHeight * 0.5,
-          z,
-          plane,
-        })
+Particle.prototype.drawParticle = function() {
+    if(this.x > 10 && this.x < space*row && this.y > 10 && this.y < space*col && this.ttl > cur) {
+            angle = vectorlist[Math.floor(this.x/space-margin)][Math.floor(this.y/space-margin)].angle,
+            this.accy = Math.sin(angle) * this.influence;
+            this.accx = Math.cos(angle) * this.accoeff;
 
-        for (let c = 0; c < curve; c += 1) {
-          grid.push({
-            x: x + columnWidth * (0 + c),
-            y: yOffset + rowHeight * 0.5 * c,
-            z,
-            plane,
-          })
-          grid.push({
-            x: x + columnWidth * (curve * 2 - c),
-            y: yOffset + rowHeight * 0.5 * c,
-            z,
-            plane,
-          })
+            this.vx += this.accx;
+            this.vy += this.accy;
+
+            this.vx *= this.friction;
+            this.vy *= this.friction;
+
+            this.x += this.vx;
+            this.y += this.vy;
+
+            line(this.x, this.y, this.prevx, this.prevy);
+
+            this.prevx = this.x;
+            this.prevy = this.y;
+    } else {
+        this.edge(true);
+    }
+}
+
+Particle.prototype.edge = function(xy) {
+    if(this.x <= 11) {
+        this.x = canwidth+margin-20;
+        this.prevx = this.x;
+    } else if (this.x >= row*space) {
+        this.x = 20;
+        this.prevx = this.x;
+    }
+    if(this.y <= 11) {
+        this.y = canheight+margin-20;
+        this.prevy = this.y;
+    } else if (this.y >= space*col) {
+        this.y = 20;
+        this.prevy = this.y;
+    }
+}
+
+Vector.prototype.drawVector = function(noise) {
+    this.angle = -1 * noise;
+    
+    //line(this.x, this.y, Math.cos(this.angle)*heightvar+this.x, Math.sin(this.angle)*heightvar+this.y);
+}
+
+for(var i = 0; i < row; i++) {
+    vectorlist.push([]);
+    for(var j = 0; j < col; j++) {
+        vectorlist[i].push(new Vector(i, j));
+    }
+}
+
+for(var i = 0; i < particlenum; i++) {
+    particlelist.push([]);
+    for(var j = 0; j < particlenum; j++) {
+        particlelist[i].push(new Particle((canwidth/particlenum)*i, (canheight/particlenum)*j));
+    }
+}   
+
+function setup() {
+    createCanvas(canwidth, canheight);
+    /* for(var k = 0; k < 10; k++) {
+        for(var i = 0; i < row; i++) {
+            for(var j = 0; j < col; j++) {
+                vectorlist[i][j].drawVector(map(noise(i*step, j*step, cur), 0, 1, 0, Math.PI*2));
+            }
         }
-
-        grid.push({
-          x: x + columnWidth * curve,
-          y: yOffset + rowHeight * 0.5 * curve,
-          z,
-          plane,
-        })
-      }
-    }
-  }
-
-  const depthSort = (a, b) => {
-    if (a.plane === b.plane) {
-      if (a.y < b.y) {
-        return -1
-      }
-
-      if (a.y > b.y) {
-        return 1
-      }
-
-      return 0
-    }
-
-    if (a.plane > b.plane) {
-      return -1
-    }
-
-    if (a.plane < b.plane) {
-      return 1
-    }
-
-    return 0
-  }
-
-  const depthFilter = ({ z }) => {
-    if (z === 0) {
-      return Math.random() > 0.25
-    }
-
-    return true
-  }
-
-  grid
-    .sort(depthSort)
-    .filter(depthFilter)
-    .map(cube => ({
-      ...cube,
-      size,
-      colour: getRColour(),
-    }))
-    .forEach(cube => drawIsoCube(ctx, cube))
+    } */
 }
 
-sketch()
+function draw() {
+    frameRate(60);
+    //background(255);
+    cur += inc;
+
+    stroke(objcolor);
+    fill(objcolor);
+
+    for(var i = 0; i < row; i++) {
+        for(var j = 0; j < col; j++) {
+            vectorlist[i][j].drawVector(map(noise(i*step, j*step, cur), 0, 1, 0, Math.PI*2));
+        }
+    }
+    for(var i = 0; i < particlenum; i++) {
+        for(var j = 0; j < particlenum; j++) {
+            particlelist[i][j].drawParticle();
+        }
+    }
+    /* if(cur == 300*0.03) {
+        saveCanvas('NoiseField.png');
+    } */
+}

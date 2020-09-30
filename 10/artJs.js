@@ -1,147 +1,95 @@
-const canvas = document.querySelector('.container')
+var canwidth = window.innerWidth;
+var canheight = window.innerHeight-100;
 
-buildField = (p, { width, height, scale = 20 }) => {
-  const fieldStrength = 0.35
-  const angleHeading = 270
-  const angleScale = 0.5
-  const noiseScale = 0.007
+var particlelist = [];
 
-  const getVector = (x, y) => {
-    const r = p.noise(x * noiseScale, y * noiseScale)
-    const angle = p.radians(r * angleScale * 360 + (-45 + angleHeading))
-    const vector = p5.Vector.fromAngle(angle)
-    vector.setMag(fieldStrength)
+var margin = 50;
+var space = canheight/30;
 
-    return vector
-  }
+var col = Math.floor((canheight-margin-margin)/space);
+var row = col;
 
-  const drawVector = (vector, x, y) => {
-    const length = 0.5 * scale
-    p.push()
+var friction = 0.5;
+var k = 0.1;
+var depth = 7;
 
-    p.stroke(50, 0.5)
-    p.fill(50, 0.5)
-    p.strokeWeight(length * 0.2)
-
-    p.translate(x, y)
-    p.rotate(vector.heading())
-    p.line(0, 0, length, 0)
-    p.triangle(length / 2, length * 0.2, length, 0, length / 2, length * -0.2)
-
-    p.pop()
-  }
-
-  const draw = () => {
-    for (let y = 0; y < height; y += scale) {
-      for (let x = 0; x < width; x += scale) {
-        const vector = getVector(x, y)
-        drawVector(vector, x, y)
-      }
+for(var i = 0; i < col; i++) {
+    particlelist.push([])
+    for(var j = 0; j < row; j++) {
+        particlelist[i].push(new Particle(i, j));
     }
-  }
-
-  return {
-    draw,
-    getVector,
-  }
 }
 
-const MAX_VELOCITY = 2
+function Particle(x, y) {
+    this.origx = x*space+margin;
+    this.origy = y*space+margin;
 
-class Particle {
-  constructor(p, { x, y, life }) {
-    this.p = p
-    this.life = life
-    this.position = p.createVector(x, y)
-    this.acceleration = p.createVector(0, 0)
-    this.velocity = p.createVector(0, 0)
+    this.x = x*space+margin;
+    this.y = y*space+margin;
 
-    this.previousPosition = this.position
-  }
+    this.vx = 0;
+    this.vy = 0;
 
-  update(force) {
-    this.previousPosition = this.p.createVector(this.position.x, this.position.y)
-
-    this.acceleration.add(force)
-    this.velocity.add(this.acceleration)
-    this.velocity.limit(MAX_VELOCITY)
-    this.position.add(this.velocity)
-    this.acceleration.mult(0)
-
-    this.life -= 1
-  }
-
-  isDead() {
-    return this.life <= 0
-  }
-
-  distanceFrom({ x, y }) {
-    return Math.sqrt((x - this.position.x) ** 2 + (y - this.position.y) ** 2)
-  }
-
-  draw() {
-    const { p } = this
-
-    p.push()
-    p.stroke(0, 0.3)
-    p.strokeWeight(1)
-    p.line(this.previousPosition.x, this.previousPosition.y, this.position.x, this.position.y)
-    p.pop()
-  }
+    this.accx = 0;
+    this.accy = 0;
 }
 
-const sketch = p => {
-  const width = window.innerWidth
-  const height = window.innerHeight
-  const radius = window.innerHeight/3
-  const center = { x: window.innerWidth / 2, y: window.innerHeight / 2 }
-  const particleLife = 50
-  const particleCount = 10000
-  const particleOrigin = {
-    x: width * 0.5,
-    y: height * 0.5,
-  }
+Particle.prototype.change = function() {
+    this.accx = ((this.x-this.origx)*k);
+    this.accy = ((this.y-this.origy)*k);
 
-  const gaussian = value => Math.abs(p.randomGaussian()) * value
+    this.vx += this.accx;
+    this.vy += this.accy;
+    this.vx *= friction;
+    this.vy *= friction;
 
-  const field = buildField(p, { width, height })
-  let particles = Array.from({ length: particleCount }).map(
-    () =>
-      new Particle(p, {
-        x: gaussian(particleOrigin.x),
-        y: height - gaussian(particleOrigin.y),
-        life: p.randomGaussian(particleLife),
-      })
-  )
+    this.x -= this.vx;
+    this.y -= this.vy;
+}
 
-  p.setup = () => {
-    p.createCanvas(window.innerWidth, window.innerHeight);
-    p.colorMode(p.HSB)
-    // p.blendMode(p.MULTIPLY)
-    // p.noLoop()
-  }
+Particle.prototype.mouse = function(val) {
+    this.vx -= depth*val;
+    this.vy -= depth*val;
+}
 
-  p.draw = () => {
-    // field.draw()
+function drawline(x1, y1, x2, y2) {
+    line(x1,y1,x2,y2);
+}
 
-    particles = particles.filter(particle => {
-      const { x, y } = particle.position
-      const force = field.getVector(x, y)
+function checkSliders() {
+    friction = document.getElementById("friction").value/100;
+    k = document.getElementById("k").value/100
+    depth = document.getElementById("depth").value;
+}
 
-      if (particle.distanceFrom(center) > radius || particle.isDead()) {
-        return false
-      }
-
-      particle.update(force)
-      particle.draw()
-      return true
-    })
-
-    if (particles.length <= 0) {
-      console.log('Stopping loop.')
-      p.noLoop()
+function setup() {
+    createCanvas(canwidth, canheight);
+    strokeWeight(1);
+    checkSliders();
+}
+function draw() {
+    background(0);
+    stroke(140)
+    fill(140)
+    for(var i = 0; i < col; i++) {
+        for(var j = 0; j < row; j++) {
+            particlelist[i][j].change();
+        }
     }
-  }
-}
+    for(var i = 0; i < col; i++) {
+        for(var j = 0; j < row-1; j++) {
+            drawline(particlelist[i][j].x, particlelist[i][j].y, particlelist[i][j+1].x, particlelist[i][j+1].y);
+            drawline(particlelist[j+1][i].x, particlelist[j+1][i].y, particlelist[j][i].x, particlelist[j][i].y);
+        }
+    }
 
-new p5(sketch, canvas) // eslint-disable-line no-new
+    if(mouseX <= row*space && mouseY <= col*space && mouseX >= margin+space && mouseY >= margin+space) {
+        var indexx = Math.floor((mouseX-margin)/(space));
+        var indexy = Math.floor((mouseY-margin)/(space));
+        particlelist[indexx][indexy].mouse(1);
+        particlelist[indexx+1][indexy].mouse(0.5);
+        particlelist[indexx][indexy+1].mouse(0.5);
+        particlelist[indexx-1][indexy].mouse(0.5);
+        particlelist[indexx][indexy-1].mouse(0.5);
+    }
+}

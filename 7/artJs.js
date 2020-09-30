@@ -3,14 +3,18 @@ var canheight = window.innerHeight;
 var canwidthhalf = canwidth/2;
 var canheighthalf = canheight/2;
 
-var parnum = 20;
+var parnum = 30;
 var changewidth = 2000/parnum;
-var changeheight = 1000/parnum;
+var changeheight = parnum*50/parnum;
 
-var radius = 8;
-var linestrokeWidth = 2;
+var radius = 6;
+var linestrokeWidth = 1;
 
 var particlelist = [];
+
+var bundlepoint = 0.6;
+
+linecolor = 70;
 
 function ease_out(x, xoffset) {
     if(xoffset >= canwidthhalf) {
@@ -18,13 +22,21 @@ function ease_out(x, xoffset) {
     } else {
         return -1*Math.exp(x/60)/(canwidth*0.9);
     }
+    /* return Math.exp(x/60)/(canwidth*0.1); */
+}
+
+function bundling(xoffset, h) {
+    return ((xoffset-(canwidthhalf))/(canwidth*bundlepoint)) * h;
+}
+function smoothing(noise, h) {
+    return noise*(h/canheight)*3;
 }
 
 function Particle(n) {
     this.x = 0;
     this.y = 0;
 
-    this.xoffset = canwidthhalf-50+(n-parnum/2)*30;
+    this.xoffset = canwidthhalf-50+(n-parnum/2)*500*(1/parnum);
     this.yoffset = (Math.sin((1/parnum)*(n+0.5)*Math.PI))*100+200;
     
     this.xoff = n;
@@ -63,12 +75,12 @@ Particle.prototype.renderparticle = function() {
     strokeWeight(linestrokeWidth);
     noFill();
     beginShape();
-    stroke(100);
+    stroke(linecolor);
     for(var h = 0; h < canheight; h++) {    
-        vertex(this.vertexlistx[this.vertexlistx.length-h]-(((this.xoffset-(canwidthhalf))/(canwidth*0.8)) * h)+ease_out(h, this.xoffset), h+this.vertexlisty[this.vertexlisty.length-h]);
+        vertex(this.vertexlistx[this.vertexlistx.length-h] - bundling(this.xoffset, h) + ease_out(h, this.xoffset) - smoothing(this.noiselist[this.noiselist.length-h], h), h+this.vertexlisty[this.vertexlisty.length-h]);
     }
     endShape();
-
+    stroke(255);
     fill(255);
     ellipse(this.x, this.y, radius, radius)
 }
@@ -79,6 +91,13 @@ for(var n = 0; n < parnum; n++) {
 
 function setup() {
     createCanvas(canwidth, canheight);
+
+    //Preload image
+    /* for(var i = 0; i < canheight; i++) {
+        for(var n = 0; n < parnum; n++) {
+            particlelist[n].changevars();
+        }
+    }  */
 }
 function draw() {
     background(0);

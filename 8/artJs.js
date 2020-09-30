@@ -1,125 +1,147 @@
-// by Etienne JACOB
-// uses a formula inspired by @ozachou_g (on twitter)
+const canvas = document.querySelector('.container')
 
-var x,y,z,t;
+buildField = (p, { width, height, scale = 20 }) => {
+  const fieldStrength = 0.35
+  const angleHeading = 270
+  const angleScale = 0.5
+  const noiseScale = 0.007
 
-var A = [];
-var f = [];
-var ph = [];
+  const getVector = (x, y) => {
+    const r = p.noise(x * noiseScale, y * noiseScale)
+    const angle = p.radians(r * angleScale * 360 + (-45 + angleHeading))
+    const vector = p5.Vector.fromAngle(angle)
+    vector.setMag(fieldStrength)
 
-var N,rot0,v;
-
-var frame = 0;
-
-function initialize(){
-	frame = 0;
-	
-  for(var i=0;i<12;i++){
-    A[i] = random(-3.0,3.0);
-    f[i] = random(-1.2,1.2);
-    ph[i] = random(TWO_PI);
+    return vector
   }
-  
-  x = random(-1,1);
-  y = random(-1,1);
-  z = random(-1,1);
-  
-  t = 0;
-	
-	v = 0.0000001*pow(10,random(5));
 
-  background(235);
-  
-  rot0 = random(TWO_PI);
-  N = floor(random(5,15));
-}
+  const drawVector = (vector, x, y) => {
+    const length = 0.5 * scale
+    p.push()
 
-function setup() {
-	//createCanvas(windowWidth, windowHeight);
-	createCanvas(window.innerWidth, window.innerHeight);
-	
-	initialize();
-}
+    p.stroke(50, 0.5)
+    p.fill(50, 0.5)
+    p.strokeWeight(length * 0.2)
 
-function move(){
-  var xx = A[0]*sin(f[0]*x+ph[0]) + A[1]*cos(f[1]*y+ph[1]) + 2*A[2]*sin(f[2]*t+ph[2]) + A[3]*sin(f[3]*z+ph[3]);
-  var yy = A[4]*cos(f[4]*x+ph[4]) + A[5]*sin(f[5]*y+ph[5]) + 2*A[6]*cos(f[6]*t+ph[6]) + A[7]*sin(f[7]*z+ph[7]);
-  var zz = A[8]*sin(f[8]*x+ph[8]) + A[9]*cos(f[9]*y+ph[9]) + 2*A[10]*sin(f[10]*t+ph[10]) + A[11]*cos(f[11]*z+ph[11]);
-  var tt = t + v;
-	
-  x = xx;
-  y = yy;
-  z = zz;
-  t = tt;
-}
+    p.translate(x, y)
+    p.rotate(vector.heading())
+    p.line(0, 0, length, 0)
+    p.triangle(length / 2, length * 0.2, length, 0, length / 2, length * -0.2)
 
-function step(){
-  move();
-  
-  push();
-	
-  translate(width/2,height/2);
-  rotate(TWO_PI*floor(random(N))/N + 0*rot0);
-
-  var scale = 0.3;
-  
-  var xx = scale*sin(0.4*x);
-  var yy = scale*sin(0.4*y);
-  var zz = scale*sin(0.4*z);
-
-  stroke(0,7);
-  
-  if(-zz+zdist>0){
-    var proj = projection(xx,yy,zz);
-    strokeWeight(1+random(0,0.35)*proj[2]);
-    
-    point(proj[0]+0.5*randomGaussian(),proj[1]+0.5*randomGaussian());
+    p.pop()
   }
-  
-  pop();
-}
 
-var zdist = 0.45;
-
-function projection(xx,yy,zz){
-  var xxx = 200*xx/(-zz+zdist);
-  var yyy = 200*yy/(-zz+zdist);
-  return [xxx,yyy,1/(-zz+zdist)];
-}
-
-function finish(){
-  print("finished");
-  saveCanvas("res"+floor(random(1000000))+".png");
-  stop();
-}
-
-function keyPressed() {
-  finish();
-}
-
-function mousePressed(){
-  initialize();
-}
-
-var numFrames = 1000;
-
-var K = 2500;
-
-function draw() {
-	frame++;
-	/*
-	if(mousePressed){
-    initialize();
-  }*/
-  
-  for(var k=0;k<K;k++){
-    step();
+  const draw = () => {
+    for (let y = 0; y < height; y += scale) {
+      for (let x = 0; x < width; x += scale) {
+        const vector = getVector(x, y)
+        drawVector(vector, x, y)
+      }
+    }
   }
-	
-  //console.log(frameCount,'/',numFrames);
-	//print(frame,'/',numFrames);
-	
-  if(frame==numFrames){
-    finish();
+
+  return {
+    draw,
+    getVector,
   }
 }
+
+const MAX_VELOCITY = 2
+
+class Particle {
+  constructor(p, { x, y, life }) {
+    this.p = p
+    this.life = life
+    this.position = p.createVector(x, y)
+    this.acceleration = p.createVector(0, 0)
+    this.velocity = p.createVector(0, 0)
+
+    this.previousPosition = this.position
+  }
+
+  update(force) {
+    this.previousPosition = this.p.createVector(this.position.x, this.position.y)
+
+    this.acceleration.add(force)
+    this.velocity.add(this.acceleration)
+    this.velocity.limit(MAX_VELOCITY)
+    this.position.add(this.velocity)
+    this.acceleration.mult(0)
+
+    this.life -= 1
+  }
+
+  isDead() {
+    return this.life <= 0
+  }
+
+  distanceFrom({ x, y }) {
+    return Math.sqrt((x - this.position.x) ** 2 + (y - this.position.y) ** 2)
+  }
+
+  draw() {
+    const { p } = this
+
+    p.push()
+    p.stroke(0, 0.3)
+    p.strokeWeight(1)
+    p.line(this.previousPosition.x, this.previousPosition.y, this.position.x, this.position.y)
+    p.pop()
+  }
+}
+
+const sketch = p => {
+  const width = window.innerWidth
+  const height = window.innerHeight
+  const radius = window.innerHeight/3
+  const center = { x: window.innerWidth / 2, y: window.innerHeight / 2 }
+  const particleLife = 50
+  const particleCount = 10000
+  const particleOrigin = {
+    x: width * 0.5,
+    y: height * 0.5,
+  }
+
+  const gaussian = value => Math.abs(p.randomGaussian()) * value
+
+  const field = buildField(p, { width, height })
+  let particles = Array.from({ length: particleCount }).map(
+    () =>
+      new Particle(p, {
+        x: gaussian(particleOrigin.x),
+        y: height - gaussian(particleOrigin.y),
+        life: p.randomGaussian(particleLife),
+      })
+  )
+
+  p.setup = () => {
+    p.createCanvas(window.innerWidth, window.innerHeight);
+    p.colorMode(p.HSB)
+    // p.blendMode(p.MULTIPLY)
+    // p.noLoop()
+  }
+
+  p.draw = () => {
+    // field.draw()
+
+    particles = particles.filter(particle => {
+      const { x, y } = particle.position
+      const force = field.getVector(x, y)
+
+      if (particle.distanceFrom(center) > radius || particle.isDead()) {
+        return false
+      }
+
+      particle.update(force)
+      particle.draw()
+      return true
+    })
+
+    if (particles.length <= 0) {
+      console.log('Stopping loop.')
+      p.noLoop()
+    }
+  }
+}
+
+new p5(sketch, canvas) // eslint-disable-line no-new
