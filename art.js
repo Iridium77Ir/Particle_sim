@@ -12,8 +12,4 @@ app.get("/:num/artJs.js", async (req, res) => {
     res.sendFile(path.join(__dirname + "/" + req.params.num + "/artJs.js"))
 })
 
-app.get("/screenshots/:num", async (req, res) => {
-    res.sendFile(path.join(__dirname + "/screenshots/" + req.params.num))
-})
-
 app.listen(3009)
