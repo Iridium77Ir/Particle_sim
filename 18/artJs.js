@@ -93,8 +93,8 @@ Boid.prototype.edge = function () {
         this.x = 0;
     }
     if(this.y < 0) {
-        this.y = main.w;
-    } else if(this.y > main.w) {
+        this.y = main.h;
+    } else if(this.y > main.h) {
         this.y = 0;
     }
 }
