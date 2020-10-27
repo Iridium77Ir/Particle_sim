@@ -1,0 +1,270 @@
+@font-face {
+  font-family: 'ISO Regular';
+  src: local('ISO v0.5'),
+    url('https://s3.amazonaws.com/lkpttn-font-server/ISOv0.5-Regular.woff')
+      format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'ISO Bold';
+  src: local('ISO v0.5'),
+    url('https://s3.amazonaws.com/lkpttn-font-server/ISOv0.5-Bold.woff')
+      format('woff');
+  font-weight: bold;
+  font-style: normal;
+}
+
+html {
+  background: #191618;
+  font-family: 'ISO Regular', sans-serif;
+  font-weight: 100;
+}
+
+body {
+  width: 100%;
+  margin: 0 auto;
+  color: #ffffff;
+}
+
+h1 {
+  font-family: 'ISO Bold';
+  text-transform: uppercase;
+  font-size: 2.5em;
+  line-height: 0.5em;
+  margin-bottom: 0;
+}
+
+h2 {
+  font-family: 'ISO Bold', sans-serif;
+  text-transform: uppercase;
+  font-size: 2.5em;
+  margin-bottom: 0;
+}
+
+h3 {
+  font-family: 'ISO Bold', sans-serif;
+  font-size: 1.8em;
+  text-transform: uppercase;
+  margin-bottom: 0;
+}
+
+p {
+  font-size: 1.2em;
+}
+
+p a {
+  color: #ffffff;
+}
+
+header {
+  color: #ffffff;
+}
+
+header a {
+  color: #da3a2d;
+  text-decoration: underline;
+}
+
+ol {
+  list-style: decimal-leading-zero;
+  list-style-position: inside;
+  margin: 0;
+  padding: 0;
+}
+
+#list {
+  columns: 1 auto;
+}
+
+ol li {
+  font-size: 1.2em;
+  color: #ffffff;
+  padding-right: 15px;
+}
+
+@media screen and (min-width: 500px) {
+  /* Medium stuff */
+  #list {
+    columns: 2 auto;
+  }
+}
+
+@media screen and (min-width: 800px) {
+  /* Medium stuff */
+  #list {
+    columns: 4 auto;
+  }
+}
+
+ol li a {
+  color: #ffffff;
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  min-height: 900px;
+  margin: 0 auto;
+  padding-bottom: 50px;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+@media screen and (min-width: 1200px) {
+  /* Large stuff */
+  .container {
+    flex-flow: row nowrap;
+    padding: 0;
+  }
+}
+
+header .container {
+  flex-flow: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.heading {
+  max-width: 100%;
+  padding: 15px;
+}
+
+@media screen and (min-width: 1200px) {
+  /* Large stuff */
+  .heading {
+    max-width: 66%;
+  }
+}
+
+.navigation {
+  padding: 15px;
+}
+
+.item {
+  order: 1;
+  flex: 1 0 340px;
+  margin-top: 50px;
+}
+
+@media screen and (min-width: 800px) {
+  .item {
+    flex: 0 1 340px;
+    margin-top: 0px;
+  }
+}
+
+.card {
+  margin: 0 auto;
+  height: auto;
+  max-height: 700px;
+  width: auto;
+  max-width: 50vw;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.2);
+  transition: all 1s ease;
+}
+
+.img {
+  height: auto;
+  max-height: 700px;
+  width: auto;
+  max-width: 50vw;
+}
+
+@media screen and (min-width: 1000px) {
+  .card {
+    /* margin: 0; */
+  }
+}
+
+.card.front {
+  background: #fff;
+  border: 20px solid #fff;
+}
+
+.description {
+  order: 2;
+  flex: 2;
+  max-width: 100%;
+}
+
+@media screen and (min-width: 800px) {
+  .description {
+    margin-left: 50px;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .description {
+    flex: 0 0 690px;
+  }
+}
+
+.description h2 {
+  font-family: 'ISO Bold';
+  text-transform: uppercase;
+  font-size: 2.5em;
+  margin-bottom: 0;
+}
+
+.description p {
+  margin-top: 0;
+}
+
+pre {
+  display: none;
+}
+
+@media screen and (min-width: 1200px) {
+  pre {
+    display: block;
+    position: relative;
+    font-size: 1em;
+    margin-top: 2.5em;
+  }
+}
+
+button.update {
+  display: block;
+  background: #ffffff;
+  color: #5c5c5c;
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 10px;
+  border: none;
+  margin: 10px 0px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 1em;
+  font-family: 'ISO Bold', monospace;
+}
+
+button.update:hover {
+  color: #000000;
+}
+
+@media screen and (min-width: 1200px) {
+  /* Large stuff */
+  .gallery-item:nth-child(odd) .container .item {
+    order: 1;
+  }
+
+  .gallery-item:nth-child(odd) .container .description {
+    order: 2;
+  }
+
+  .gallery-item:nth-child(even) .container .item {
+    order: 2;
+  }
+
+  .gallery-item:nth-child(even) .container .description {
+    order: 1;
+    margin-left: 0px;
+    margin-right: 50px;
+  }
+}

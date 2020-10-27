@@ -1,49 +1,330 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ART</title>
-    <style>
-        .img {
-            width: 500px;
-        }
-        #images {
-            display: flex;
-            flex-wrap: wrap;
-        }
-    </style>
-</head>
-<body style="background-color: black;color: white;text-align: center;">
-    <div style="padding: 100px;">
-    </div>
-    <div style="padding:100px;font-size: 30px;">
-        <p>Please enter a number after the url, for example: "https://art.nikober.xyz/1"</p>
-        <a style="cursor: pointer;color: lightblue;text-decoration: none;" href="https://art.nikober.xyz/1">art.nikober.xyz/1</a>
-        <br>
-        <a style="cursor: pointer;color: lightblue;text-decoration: none;" href="https://art.nikober.xyz/2">art.nikober.xyz/2</a>
-    </div>
-    <div id="images">
-        <a href="/1"><img class="img" src="https://preview.redd.it/y0o23ygpyes51.jpg?width=1596&format=pjpg&auto=webp&s=73f743bb5316659327a3d7eb98a78297a44a3eb6" alt=""></a>
-        <a href="/2"><img class="img" src="https://preview.redd.it/pswcamipyes51.jpg?width=1535&format=pjpg&auto=webp&s=158afd51a70520643494c3bc23168296f784e7d9" alt=""></a>
-        <a href="/3"><img class="img" src="https://preview.redd.it/406yp1hpyes51.jpg?width=1690&format=pjpg&auto=webp&s=20809c2c1a958dec840c5d719e8d7630b49a655b" alt=""></a>
-        <a href="/4"><img class="img" src="https://preview.redd.it/s1d4ziipyes51.jpg?width=1750&format=pjpg&auto=webp&s=4ef776c559360847f63525a977054808472bd97b" alt=""></a>
-        <a href="/5"><img class="img" src="https://preview.redd.it/kgbrlfhpyes51.jpg?width=1388&format=pjpg&auto=webp&s=4da8a102d822777401d43f8bf3eab4c1862c6f9d" alt=""></a>
-        <a href="/6"><img class="img" src="https://preview.redd.it/ifcvylipyes51.jpg?width=1430&format=pjpg&auto=webp&s=c63a934772a38b6f2d7b339536aad820a2f25e49" alt=""></a>
-        <a href="/7"><img class="img" src="https://preview.redd.it/nya0m2hpyes51.jpg?width=886&format=pjpg&auto=webp&s=d0361af9ff2e47b53ead3d93e032d5176fbffbbc" alt=""></a>
-        <a href="/8"><img class="img" src="https://preview.redd.it/tk8orlipyes51.jpg?width=1113&format=pjpg&auto=webp&s=24f74a1a77df82064989594d9baf48aae483eaa7" alt=""></a>
-        <a href="/9"><img class="img" src="https://preview.redd.it/x9seajhpyes51.jpg?width=1464&format=pjpg&auto=webp&s=fda138e997749997b24b298f94e18d7e710ed423" alt=""></a>
-        <a href="/10"><img class="img" src="https://preview.redd.it/eyp5gsipyes51.jpg?width=917&format=pjpg&auto=webp&s=9ec8fa7178bdceb999596bab8b91be4b540cfabe" alt=""></a>
-        <a href="/11"><img class="img" src="https://preview.redd.it/yxazqfjpyes51.jpg?width=1446&format=pjpg&auto=webp&s=4281588032d0c1a5b48ba577175ccbdfb70ee2c3" alt=""></a>
-        <a href="/12"><img class="img" src="https://preview.redd.it/xg45znhpyes51.jpg?width=1227&format=pjpg&auto=webp&s=c9846d554b4b6d42b359c5a3d36c1a0265921548" alt=""></a>
-        <a href="/13"><img class="img" src="https://preview.redd.it/gwkivhhpyes51.jpg?width=1079&format=pjpg&auto=webp&s=fd83e14c3f462d7add562ad70bf5b993ac41fb50" alt=""></a>
-        <a href="/14"><img class="img" src="https://preview.redd.it/6hhx4cipyes51.jpg?width=556&format=pjpg&auto=webp&s=04a17c8177fcfe859cc4bb673425f3caa88b5b09" alt=""></a>ö
-        <a href="/15"><img class="img" src="https://preview.redd.it/uloao6ipyes51.jpg?width=790&format=pjpg&auto=webp&s=e9874671306132723e5e19a512820faf21f61ff9" alt=""></a>
-        <a href="/16"><img class="img" src="https://preview.redd.it/xcb8kghpyes51.jpg?width=736&format=pjpg&auto=webp&s=3df922fdb57392eb9bbd49f79c844bde937e2b6d" alt=""></a>
-        <a href="/17"><img class="img" src="https://preview.redd.it/lefgrtipyes51.jpg?width=988&format=pjpg&auto=webp&s=4cc2529639dc3c0fdd6fe9a6c9af3cd457103758" alt=""></a>
-        <a href="/18"><img class="img" src="https://preview.redd.it/sodew4ydq9u51.jpg?width=879&format=pjpg&auto=webp&s=25e0a0edd741ee727a24e44c3ead8eab5e03a777" alt=""></a>
-        <a href="/19"><img class="img" src="https://preview.redd.it/x8cl82ydq9u51.jpg?width=751&format=pjpg&auto=webp&s=b3b065dc1727312eec2472238337daf38c4b8e02" alt=""></a>
-        <a href="/20"><img class="img" src="https://preview.redd.it/btnn83ydq9u51.jpg?width=743&format=pjpg&auto=webp&s=b2a6b47e8617dde2cff77a75ff647a130a4c2789" alt=""></a>
-    </div>
-</body>
+  <head>
+    <title>ART.NIKOBER.XYZ</title>
+    <meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, shrink-to-fit=0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
+	
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <script defer src="color.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.1.0/chroma.min.js"></script>
+	
+  </head>
+  <body>
+
+    <header>
+      <div class="container">
+        <div class="heading">
+          <h1>ART.NIKOBER.XYZ</h1>
+			<p>This is a collection of my attempts at creating generative art. Sometimes it is interactive, sometimes not.</p>
+			<p>You can see the progression in skill as you scroll through.</p>
+			<p>Source code is at: <a href="https://github.com/Iridium77Ir/art.nikober.xyz">https://github.com/Iridium77Ir/art.nikober.xyz</a></p>
+			<p>This HTML and CSS was shamelessly stolen from: <a href="https://canvas-cards.glitch.me/">https://canvas-cards.glitch.me/</a></p>
+        </div>
+      </div>
+	</header>
+	
+		<div class="gallery">
+			<div class="gallery-item jsColor">
+				<div class="container">
+				  <div class="item">
+					<div class="card front">
+						<a href="/20"><img class="img" src="https://preview.redd.it/btnn83ydq9u51.jpg?width=743&format=pjpg&auto=webp&s=b2a6b47e8617dde2cff77a75ff647a130a4c2789" alt=""></a>
+					</div>
+				  </div>
+				  <div class="description jsTextColor">
+					<h2>Rainow trails</h2>
+					<p>
+						This is the latest rendition of the "flocking series", this time with "tail-feathers".
+					</p>
+				  </div>
+				</div>
+			</div>
+			<div class="gallery-item jsColor">
+				<div class="container">
+				  <div class="item">
+					<div class="card front">
+						<a href="/19"><img class="img" src="https://preview.redd.it/x8cl82ydq9u51.jpg?width=751&format=pjpg&auto=webp&s=b3b065dc1727312eec2472238337daf38c4b8e02" alt=""></a>
+					</div>
+				  </div>
+				  <div class="description jsTextColor">
+					<h2>Rainbow birds</h2>
+					<p>
+						The same thing, just a bit more color.
+					</p>
+				  </div>
+				</div>
+			</div>
+			<div class="gallery-item jsColor">
+				<div class="container">
+				  <div class="item">
+					<div class="card front">
+						<a href="/18"><img class="img" src="https://preview.redd.it/sodew4ydq9u51.jpg?width=879&format=pjpg&auto=webp&s=25e0a0edd741ee727a24e44c3ead8eab5e03a777" alt=""></a>
+					</div>
+				  </div>
+				  <div class="description jsTextColor">
+					<h2>Flocking Birds</h2>
+					<p>
+						Ever notice how birds seems to group up and act as one. Yes, well this one tries to imitate this behaviour using the "boid" algorithm.
+					</p>
+				  </div>
+				</div>
+			</div>
+			<div class="gallery-item jsColor">
+				<div class="container">
+				  <div class="item">
+					<div class="card front">
+						<a href="/17"><img class="img" src="https://preview.redd.it/lefgrtipyes51.jpg?width=988&format=pjpg&auto=webp&s=4cc2529639dc3c0fdd6fe9a6c9af3cd457103758" alt=""></a>
+					</div>
+				  </div>
+				  <div class="description jsTextColor">
+					<h2>Uglier fluid bath</h2>
+					<p>
+						Hmm, wierd, there is this option for a fixed material called "normal", and it's really ugly but really fast...
+					</p>
+				  </div>
+				</div>
+			</div>
+			<div class="gallery-item jsColor">
+				<div class="container">
+				  <div class="item">
+					<div class="card front">
+						<a href="/16"><img class="img" src="https://preview.redd.it/xcb8kghpyes51.jpg?width=736&format=pjpg&auto=webp&s=3df922fdb57392eb9bbd49f79c844bde937e2b6d" alt=""></a>
+					</div>
+				  </div>
+				  <div class="description jsTextColor">
+					<h2>Heigh heat map</h2>
+					<p>
+						Move your cursor accros the cube and watch in awe as it deforms.
+					</p>
+				  </div>
+				</div>
+			</div>
+			<div class="gallery-item jsColor">
+				<div class="container">
+				  <div class="item">
+					<div class="card front">
+						<a href="/15"><img class="img" src="https://preview.redd.it/uloao6ipyes51.jpg?width=790&format=pjpg&auto=webp&s=e9874671306132723e5e19a512820faf21f61ff9" alt=""></a>
+					</div>
+				  </div>
+				  <div class="description jsTextColor">
+					<h2>Rainbow wave cube</h2>
+					<p>
+						This is my first attempt at 3d, and let me tell you, it's a lot to take in. It is a cube deforming in a sine wave pattern, inspired by "bees and bombs".
+					</p>
+				  </div>
+				</div>
+			</div>
+			<div class="gallery-item jsColor">
+				<div class="container">
+				  <div class="item">
+					<div class="card front">
+						<a href="/14"><img class="img" src="https://preview.redd.it/6hhx4cipyes51.jpg?width=556&format=pjpg&auto=webp&s=04a17c8177fcfe859cc4bb673425f3caa88b5b09" alt=""></a>
+					</div>
+				  </div>
+				  <div class="description jsTextColor">
+					<h2>Infinite drawing</h2>
+					<p>
+						We did a similar thing in 3rd grade at school once, it consisted of drawing circles using a round object and watching as a "3d" like image appeared. Well it's that but better ... and infinitely looping.
+					</p>
+				  </div>
+				</div>
+			</div>
+			<div class="gallery-item jsColor">
+				<div class="container">
+				  <div class="item">
+					<div class="card front">
+						<a href="/13"><img class="img" src="https://preview.redd.it/gwkivhhpyes51.jpg?width=1079&format=pjpg&auto=webp&s=fd83e14c3f462d7add562ad70bf5b993ac41fb50" alt=""></a>
+					</div>
+				  </div>
+				  <div class="description jsTextColor">
+					<h2>Trailing Mandala</h2>
+					<p>
+						Now this one I'm proud of, watch as the rainbow dots hypnotize you.
+					</p>
+				  </div>
+				</div>
+			</div>
+			<div class="gallery-item jsColor">
+				<div class="container">
+				  <div class="item">
+					<div class="card front">
+						<a href="/12"><img class="img" src="https://preview.redd.it/xg45znhpyes51.jpg?width=1227&format=pjpg&auto=webp&s=c9846d554b4b6d42b359c5a3d36c1a0265921548" alt=""></a>
+					</div>
+				  </div>
+				  <div class="description jsTextColor">
+					<h2>Monochrome noise field</h2>
+					<p>
+						Same thing but monochrome.
+					</p>
+				  </div>
+				</div>
+			</div>
+			<div class="gallery-item jsColor">
+				<div class="container">
+				  <div class="item">
+					<div class="card front">
+						<a href="/11"><img class="img" src="https://preview.redd.it/yxazqfjpyes51.jpg?width=1446&format=pjpg&auto=webp&s=4281588032d0c1a5b48ba577175ccbdfb70ee2c3" alt=""></a>
+					</div>
+				  </div>
+				  <div class="description jsTextColor">
+					<h2>Rainbow noise field</h2>
+					<p>
+						Using "perlin-noise", I generate a "flow-field", that guides dots, slowly forming a mesmerizing image.
+					</p>
+				  </div>
+				</div>
+			</div>
+			<div class="gallery-item jsColor">
+				<div class="container">
+				  <div class="item">
+					<div class="card front">
+						<a href="/10"><img class="img" src="https://preview.redd.it/eyp5gsipyes51.jpg?width=917&format=pjpg&auto=webp&s=9ec8fa7178bdceb999596bab8b91be4b540cfabe" alt=""></a>
+					</div>
+				  </div>
+				  <div class="description jsTextColor">
+					<h2>Deforming a grid</h2>
+					<p>
+						This one reminds me of the visualization for Einstein's gravitational theory. Drag your cursor accross and watch the grid deforming. Idea: <a href="https://bleuje.github.io/p5js-myprojects/index.html">https://bleuje.github.io/p5js-myprojects/index.html</a>
+					</p>
+				  </div>
+				</div>
+			</div>
+			<div class="gallery-item jsColor">
+				<div class="container">
+				  <div class="item">
+					<div class="card front">
+						<a href="/9"><img class="img" src="https://preview.redd.it/x9seajhpyes51.jpg?width=1464&format=pjpg&auto=webp&s=fda138e997749997b24b298f94e18d7e710ed423" alt=""></a>
+					</div>
+				  </div>
+				  <div class="description jsTextColor">
+					<h2>Isometric cubes</h2>
+					<p>
+						This one was stolen, but I can't remember from where. I modified it to create differently colored grids.
+					</p>
+				  </div>
+				</div>
+			</div>
+			<div class="gallery-item jsColor">
+				<div class="container">
+				  <div class="item">
+					<div class="card front">
+						<a href="/8"><img class="img" src="https://preview.redd.it/tk8orlipyes51.jpg?width=1113&format=pjpg&auto=webp&s=24f74a1a77df82064989594d9baf48aae483eaa7" alt=""></a>
+					</div>
+				  </div>
+				  <div class="description jsTextColor">
+					<h2>Flow-field circle</h2>
+					<p>
+						This one is copied from somewhere and I didn't modify it, I just though it looked really pretty. 
+					</p>
+				  </div>
+				</div>
+			</div>
+			<div class="gallery-item jsColor">
+				<div class="container">
+				  <div class="item">
+					<div class="card front">
+						<a href="/7"><img class="img" src="https://preview.redd.it/nya0m2hpyes51.jpg?width=886&format=pjpg&auto=webp&s=d0361af9ff2e47b53ead3d93e032d5176fbffbbc" alt=""></a>
+					</div>
+				  </div>
+				  <div class="description jsTextColor">
+					<h2>Weird tentacle things</h2>
+					<p>
+						I tried to replicate <a href="https://necessary-disorder.tumblr.com/image/629085081584205824">https://necessary-disorder.tumblr.com/image/629085081584205824</a> this, but it turned out really bad.
+					</p>
+				  </div>
+				</div>
+			</div>
+			<div class="gallery-item jsColor">
+				<div class="container">
+				  <div class="item">
+					<div class="card front">
+						<a href="/6"><img class="img" src="https://preview.redd.it/ifcvylipyes51.jpg?width=1430&format=pjpg&auto=webp&s=c63a934772a38b6f2d7b339536aad820a2f25e49" alt=""></a>
+					</div>
+				  </div>
+				  <div class="description jsTextColor">
+					<h2>Rainbow fluid bath</h2>
+					<p>
+						Are you noticing a schema yet? It seems as if I alternate between monochrome and multicolored.
+					</p>
+				  </div>
+				</div>
+			</div>
+			<div class="gallery-item jsColor">
+				<div class="container">
+				  <div class="item">
+					<div class="card front">
+						<a href="/5"><img class="img" src="https://preview.redd.it/kgbrlfhpyes51.jpg?width=1388&format=pjpg&auto=webp&s=4da8a102d822777401d43f8bf3eab4c1862c6f9d" alt=""></a>
+					</div>
+				  </div>
+				  <div class="description jsTextColor">
+					<h2>Monochrome fluid bath</h2>
+					<p>
+						This one is new. It is a top view of a fluid bath. You can create a drop with a mouse click.
+					</p>
+				  </div>
+				</div>
+			</div>
+			<div class="gallery-item jsColor">
+				<div class="container">
+				  <div class="item">
+					<div class="card front">
+						<a href="/4"><img class="img" src="https://preview.redd.it/s1d4ziipyes51.jpg?width=1750&format=pjpg&auto=webp&s=4ef776c559360847f63525a977054808472bd97b" alt=""></a>
+					</div>
+				  </div>
+				  <div class="description jsTextColor">
+					<h2>Multi Wave</h2>
+					<p>
+						Again, it steals the code from the last one and adds overlapping strips, the deformation varying in intensity.
+					</p>
+				  </div>
+				</div>
+			</div>
+			<div class="gallery-item jsColor">
+				<div class="container">
+				  <div class="item">
+					<div class="card front">
+						<a href="/3"><img class="img" src="https://preview.redd.it/406yp1hpyes51.jpg?width=1690&format=pjpg&auto=webp&s=20809c2c1a958dec840c5d719e8d7630b49a655b" alt=""></a>
+					</div>
+				  </div>
+				  <div class="description jsTextColor">
+					<h2>Single Wave</h2>
+					<p>
+						This one is the first innovative one. A strip of connected points deforms at the click of your mouse and behaves like a fluid?
+					</p>
+				  </div>
+				</div>
+			</div>
+			<div class="gallery-item jsColor">
+				<div class="container">
+				  <div class="item">
+					<div class="card front">
+						<a href="/2"><img class="img" src="https://preview.redd.it/pswcamipyes51.jpg?width=1535&format=pjpg&auto=webp&s=158afd51a70520643494c3bc23168296f784e7d9" alt=""></a>
+					</div>
+				  </div>
+				  <div class="description jsTextColor">
+					<h2>Trailing Band</h2>
+					<p>
+						My second piece takes the code from the first one and removes the text component, adds gravitational attraction to the cursor and boom!, have fun!
+					</p>
+				  </div>
+				</div>
+			</div>
+			<div class="gallery-item jsColor">
+				<div class="container">
+				  <div class="item">
+					<div class="card front">
+						<a href="/1"><img class="img" src="https://preview.redd.it/y0o23ygpyes51.jpg?width=1596&format=pjpg&auto=webp&s=73f743bb5316659327a3d7eb98a78297a44a3eb6" alt=""></a>
+					</div>
+				  </div>
+				  <div class="description jsTextColor">
+					<h2>The Beginning</h2>
+					<p>
+						This is my first piece, it features an interactive text formed from dots that move out of the way of your cursor.
+					</p>
+				  </div>
+				</div>
+			</div>
+		</div>
+  </body>
 </html>
