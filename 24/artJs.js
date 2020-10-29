@@ -29,7 +29,12 @@ function setup() {
 function draw() {
     if(frameCounter%(circleAmountH*circleAmountW) == 0) {
         frameCounter = 0;
-    }
+    };
+    if(frameCounter%(circleAmountH*circleAmountW)*4 == 0) {
+        basecolor = getSplitComplementary(chroma.random());
+        colors = [basecolor[1].hex(), basecolor[2].hex(), basecolor[3].hex()];
+        bgc = basecolor[0].hex();
+    };
 
     //Does it from left to right
     /* anglesarray[frameCounter%circleAmountW][floor(frameCounter/circleAmountH)]++; */
@@ -104,5 +109,5 @@ function update() {
 }
 
 function getSplitComplementary(icolor) {
-    return [icolor.luminance(0.99), icolor, chroma.hsl(icolor.get('hsl')[0]+180-30, icolor.get('hsl')[1], icolor.get('hsl')[2]), chroma.hsl(icolor.get('hsl')[0]+180+30, icolor.get('hsl')[1], icolor.get('hsl')[2])];
+    return [icolor.luminance(0.94), icolor, chroma.hsl(icolor.get('hsl')[0]+180-30, icolor.get('hsl')[1], icolor.get('hsl')[2]), chroma.hsl(icolor.get('hsl')[0]+180+30, icolor.get('hsl')[1], icolor.get('hsl')[2])];
 }
