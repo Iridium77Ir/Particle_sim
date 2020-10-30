@@ -6,9 +6,6 @@ var cur = 0;
 var step = 0.1;
 
 var radius = 1;
-//var objcolor = 'rgba(0,100,0,0.01)';
-var color1 = 'hsla(';
-var color2 = ', 59%, 32%, 0.03)';
 
 var space = 10;
 var margin = 0;
@@ -47,13 +44,13 @@ function Particle(x, y) {
     this.accx = 0;
     this.accy = 0;
 
-    this.friction = friction + Math.random()*0.1;
-    this.influence = influence + Math.random()*0.5;
-    this.accoeff = accoeff + Math.random()*5;
+    this.friction = friction + Math.random()*0.05;
+    this.influence = influence + Math.random()*0.2;
+    this.accoeff = accoeff + Math.random()*2;
 
     this.ttl = 4 + Math.random()*3;
 
-    this.color = color1 + Math.floor(easymap(this.x, 0, space+margin, 0, 360)) + color2;
+    this.color = Math.floor(easymap(this.x, 0, space+margin, 0, 360));
 }
 
 function Vector(x, y) {
@@ -67,45 +64,43 @@ function Vector(x, y) {
 }
 
 Particle.prototype.drawParticle = function() {
-    if(this.x > 10 && this.x < space*row && this.y > 10 && this.y < space*col && this.ttl > cur) {
-            angle = vectorlist[Math.floor(this.x/space-margin)][Math.floor(this.y/space-margin)].angle,
-            this.accy = Math.sin(angle) * this.influence;
-            this.accx = Math.cos(angle) * this.accoeff;
+    angle = vectorlist[Math.floor(constrain(this.x, 0, canwidth-10)/space-margin)][Math.floor(constrain(this.y, 0, canheight-10)/space-margin)].angle,
+    this.accy = Math.sin(angle) * this.influence;
+    this.accx = Math.cos(angle) * this.accoeff;
 
-            this.vx += this.accx;
-            this.vy += this.accy;
+    this.vx += this.accx;
+    this.vy += this.accy;
 
-            this.vx *= this.friction;
-            this.vy *= this.friction;
+    this.vx *= this.friction;
+    this.vy *= this.friction;
 
-            this.x += this.vx;
-            this.y += this.vy;
+    this.x += this.vx;
+    this.y += this.vy;
 
-            stroke(color(this.color));
-            this.color = color1 + Math.floor(easymap(this.x, 0, canwidth+margin, 0, 360)) + color2;
+    this.edge();
 
-            line(this.x, this.y, this.prevx, this.prevy);
+    stroke(this.color, 59, 32, 0.04);
+    this.color = Math.floor(easymap(this.x, 0, canwidth+margin, 0, 360));
 
-            this.prevx = this.x;
-            this.prevy = this.y;
-    } else {
-        this.edge(true);
-    }
+    line(this.x, this.y, this.prevx, this.prevy);
+
+    this.prevx = this.x;
+    this.prevy = this.y;
 }
 
-Particle.prototype.edge = function(xy) {
-    if(this.x <= 11) {
-        this.x = canwidth+margin-20;
+Particle.prototype.edge = function() {
+    if(this.x <= 0) {
+        this.x = canwidth+margin-2;
         this.prevx = this.x;
     } else if (this.x >= row*space) {
-        this.x = 20;
+        this.x = 2;
         this.prevx = this.x;
     }
-    if(this.y <= 11) {
-        this.y = canheight+margin-20;
+    if(this.y <= 0) {
+        this.y = canheight+margin-2;
         this.prevy = this.y;
     } else if (this.y >= space*col) {
-        this.y = 20;
+        this.y = 2;
         this.prevy = this.y;
     }
 }
@@ -132,6 +127,7 @@ for(var i = 0; i < particlenum; i++) {
 
 function setup() {
     createCanvas(canwidth, canheight);
+    colorMode(HSL);
     /* for(var k = 0; k < 10; k++) {
         for(var i = 0; i < row; i++) {
             for(var j = 0; j < col; j++) {
