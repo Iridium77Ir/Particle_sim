@@ -9,7 +9,11 @@ var main = {
     particleArray: [],
     particlenum: 10000,
     defFric: 0.4,
-    defInfl: 15
+    defInfl: 15,
+    color: '#000000',
+    transparency: 178,
+    backgroundColor: '#ffffff',
+    backgroundTransparency: 35
 };
 var guiMain = {
     w: 1000, 
@@ -18,15 +22,23 @@ var guiMain = {
     chaosCoeff: 3,
     particlenum: 10000,
     defFric: 0.4,
-    defInfl: 15
+    defInfl: 15,
+    color: '#000000',
+    transparency: 178,
+    backgroundColor: '#ffffff',
+    backgroundTransparency: 35
 };
+
+var backgroundcolval;
+var colval;
 
 function setup() {
     main.particleArray = []; main.vectorArray = [];
     //
     createCanvas(main.w, main.h);
     colorMode(RGB);
-    stroke(0, 0, 0, 50);
+    colval = chroma(main.color)._rgb;
+    stroke(colval[0], colval[1], colval[2], main.transparency);
     strokeWeight(1);
     //Create vectors:
     for(var i = 0; i < main.w/main.fieldDensity; i++) {
@@ -39,10 +51,12 @@ function setup() {
     for(var i = 0; i < main.particlenum; i++) {
         main.particleArray.push(new Particle(i*main.fieldDensity, j*main.fieldDensity));
     };
+    backgroundcolval = chroma(main.backgroundColor)._rgb;
 };
 
 function draw() {
-    background(255, 255, 255, 10);
+    //stroke(frameCount, 50, 50, 0.09)
+    background(backgroundcolval[0], backgroundcolval[1], backgroundcolval[2], main.backgroundTransparency);
     allVectors();
     allParticles();
 };
@@ -111,7 +125,7 @@ function allParticles() {
 };
 
 var options = {
-    Generate: () => init()
+    Generate: () => {init()}
 };
 function init() {
     main.w = guiMain.w;
@@ -121,6 +135,10 @@ function init() {
     main.particlenum = guiMain.particlenum;
     main.defFric = guiMain.defFric;
     main.defInfl = guiMain.defInfl;
+    main.color = guiMain.color;
+    main.transparency = guiMain.transparency;
+    main.backgroundColor = guiMain.backgroundColor;
+    main.backgroundTransparency = guiMain.backgroundTransparency;
     setup();
 };
 function createGUI() {
@@ -128,6 +146,8 @@ function createGUI() {
     var canvasOptions = gui.addFolder('Canvas');
     canvasOptions.add(guiMain, 'w', 100, 2000, 10);
     canvasOptions.add(guiMain, 'h', 100, 2000, 10);
+    canvasOptions.add(guiMain, 'backgroundColor');
+    canvasOptions.add(guiMain, 'backgroundTransparency', 0, 255, 1);
     var vectorOptions = gui.addFolder('Vectors');
     vectorOptions.add(guiMain, 'fieldDensity', 1, 100, 2);
     vectorOptions.add(guiMain, 'chaosCoeff', 1, 20, 1);
@@ -135,6 +155,8 @@ function createGUI() {
     particleOptions.add(guiMain, 'particlenum', 1, 100000, 10);
     particleOptions.add(guiMain, 'defFric', 0, 1, 0.01);
     particleOptions.add(guiMain, 'defInfl', 1, 100, 1);
+    particleOptions.add(guiMain, 'color');
+    particleOptions.add(guiMain, 'transparency', 0, 255 , 1);
     gui.add(options, 'Generate');
 };
 createGUI();
